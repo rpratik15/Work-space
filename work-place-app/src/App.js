@@ -1,11 +1,15 @@
 
 import './App.css';
-import LandingPage from "./Components/LandingPage/index"
+import {UserContextProvider} from './context/userContext'
+import Navs from './Navs';
 
 function App() {
   return (
     <div className="App">
-   <LandingPage/>
+      <UserContextProvider>     
+         <Navs/>
+      </UserContextProvider>
+
     </div>
   );
 }

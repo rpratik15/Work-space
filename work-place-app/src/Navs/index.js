@@ -1,23 +1,24 @@
 import React ,{useContext} from "react";
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
-import Auth from "../components/Auth";
-import Onboarding from "../components/Candidate/Onboarding";
-import Profile from "../components/Candidate/Profile";
-import Jobs from "../components/Candidate/Jobs";
-import Applications from "../components/Candidate/Applications";
-import Conversation from "../components/Candidate/Conversation";
+import Auth from "../Components/Auth";
+import Onboarding from "../Components/Candidate/Onboarding";
+import Profile from "../Components/Candidate/Profile";
+import Job from "../Components/Candidate/Job";
+import Applications from "../Components/Candidate/Application";
+import Conversation from "../Components/Candidate/Conversation";
 
-import EmployerOnboarding from "../components/Employer/Onboarding";
-import EmployerProfile from "../components/Employer/Profile";
-import EmployerJob from "../components/Employer/Job";
-import EmployerApplicants from "../components/Employer/Applicants";
-import EmployerConversation from "../components/Employer/Conversation";
-import Landingpage from "../components/LandingPage";
+import EmployerOnboarding from "../Components/Employer/Onboarding";
+import EmployerProfile from "../Components/Employer/Profile";
+import EmployerJob from "../Components/Employer/Job";
+import EmployerApplicants from "../Components/Employer/Applicant";
+import EmployerConversation from "../Components/Employer/Conversation";
+import LandingPage from "../Components/LandingPage";
 import {userContext} from "../context/userContext"
 function Navs() {
   const [state,dipatch]=useContext(userContext)
   const CandidateProtected = () => {
     const isAuth=state.isAuth
+
     // isAuth is a boolean value
     if (isAuth) {
       return <Outlet/>
@@ -29,7 +30,7 @@ function Navs() {
 
   const EmployerProtected = () => {
     const isAuth=state.isAuth
-  
+
     if (isAuth) {
       return <Outlet/>
     }
@@ -40,13 +41,13 @@ function Navs() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Landingpage />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/candidate/auth" element={<Auth type={'candidate'} />} />
 
         <Route element={<CandidateProtected />}>
           <Route path="/candidate/onboarding" element={<Onboarding />} />
           <Route path="/candidate/profile" element={<Profile />} />
-          <Route path="/candidate/jobs" element={<Jobs />} />
+          <Route path="/candidate/jobs" element={<Job />} />
           <Route path="/candidate/applications" element={<Applications />} />
           <Route path="/candidate/Conversation" element={<Conversation />} />
         </Route>
