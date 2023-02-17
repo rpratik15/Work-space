@@ -231,7 +231,11 @@ function Onboarding() {
         </Grid>
         <Grid className="grid-item" item xs={12} sm={6}>
           <label>Resume </label>
-         <UploadFile/>
+         <UploadFile
+         type="doc"
+         onUpload={(url) => setUserData({ ...userData, resume: url })}
+         value={userData.resume}
+         />
         </Grid>
         <Grid
           sx={{
