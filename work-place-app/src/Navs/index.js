@@ -16,6 +16,7 @@ import LandingPage from "../Components/LandingPage";
 import {userContext} from "../context/userContext"
 function Navs() {
   const [state,dipatch]=useContext(userContext)
+  console.log("In Navs "+state.isAuth)
   const CandidateProtected = () => {
     const isAuth=state.isAuth
 

@@ -16,6 +16,7 @@ function Auth({ type }) {
   const navigate=useNavigate()
 
   const  redirectUser=()=>{
+   
     if (false) // user exists
     {
       if (false) // user exist as candidate but trying to login as employer
@@ -68,11 +69,12 @@ function Auth({ type }) {
             displayName, email, photoURL, uid
           }
         })
+        redirectUser();
       }).catch((error) => {
         console.log(error)
       });
-
-      redirectUser();
+     
+      
 
   }
   return (

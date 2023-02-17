@@ -24,6 +24,7 @@ const reducer = (state, action) => {
         isAuth: true,
       };
       localStorage.setItem("user", JSON.stringify(data));
+     
       return data;
     case "AddUSERINFO":
       data = {
@@ -44,6 +45,7 @@ const reducer = (state, action) => {
     default:
       return state;
   }
+ 
 };
 
 export const UserContextProvider = ({ children }) => {
