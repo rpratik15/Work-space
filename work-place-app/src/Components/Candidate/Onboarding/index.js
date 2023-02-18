@@ -66,7 +66,7 @@ function Onboarding() {
   }
   return (
     <form onSubmit={submitData}>
-      <div>
+      <div style={{float:'right',margin:"15px"}}>
         <Button variant="contained" endIcon={<LogoutIcon />}>Logout</Button>
       </div>
       <Grid className="grid-container" container spacing={2}>
@@ -229,7 +229,7 @@ function Onboarding() {
             onChange={(e) => { setUserData({ ...userData, bio: e.target.value }) }}
           ></TextField>
         </Grid>
-        <Grid className="grid-item" item xs={12} sm={6}>
+        <Grid className="grid-item" item xs={12} >
           <label>Resume </label>
          <UploadFile
          type="doc"
