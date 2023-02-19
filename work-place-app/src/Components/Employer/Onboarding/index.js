@@ -1,19 +1,21 @@
-import React, { useContext, useState } from 'react'
-import "./onboarding.css"
 import { Button, Grid, MenuItem, Select, TextField } from "@mui/material";
+import React, { useContext, useState } from "react";
+import "./onboarding.css";
+import {
+  companySize,
+  industryType
+} from "../../../constants";
 import LogoutIcon from '@mui/icons-material/Logout';
-import { userContext } from '../../../context/userContext';
-import { companySize,role,industryType} from '../../../constants';
-import SearchableDropDown from "../../common/SearchableDropDown"
-import UploadFile from '../../common/UploadFile';
-import {db} from "../../../firebaseconfig"
-import { setDoc,doc } from "firebase/firestore";
-import {postMessage} from "../../../utils/postMessage"
-
-
+import UploadFile from "../../common/UploadFile";
+import { userContext } from "../../../context/userContext";
+import { db } from "../../../firebaseconfig";
+import { doc, setDoc } from "firebase/firestore";
+import {postMessage} from "../../../utils/postMessage";
+import { useNavigate } from "react-router-dom";
 function Onboarding() {
-  const [state, dispatch] = useContext(userContext)
-  const [userData, setUserData] = useState({
+  const [state, dispatch] = useContext(userContext);
+  const navigate = useNavigate();
+  const [companyData, setcompanyData] = useState({
     name: state.user.displayName,
     email: state.user.email,
     phone: "",
@@ -25,218 +27,260 @@ function Onboarding() {
     companyBio: "",
     industryType: "",
     companyLogo: "",
-  })
-
-  const setSkills=(skill)=>{
-
-    if(userData.skills.includes(skill))
-    {
-      setUserData({
-        ...userData,
-        skills:userData.skills.filter((item)=>item!==skill)
-      })
-
+    
+  });
+  const setSkills = (skill) => {
+    //if skill is already present in the array then remove it
+    // else add it
+    if (companyData.skills.includes(skill)) {
+      setcompanyData({
+        ...companyData,
+        skills: companyData.skills.filter((item) => item !== skill),
+      });
+    } else {
+      setcompanyData({ ...companyData, skills: [...companyData.skills, skill] });
     }
-    else
-    {
-      setUserData({
-        ...userData,skills:[...userData.skills,skill]
-      })
-    }
-  }
-
-  const submitData= async(e)=>{
+  };
+  const submitData = async (e) => {
     e.preventDefault();
-    console.log(userData)
-    try
-    {
-    const userId=state.user.email
-    await setDoc(doc(db,"userinfo",userId),
-    {
-      ...userData,
-      userId,
-      userType:'candidate'
-    })
-    postMessage("success","Data Save Successfully!!!")
-  }
-  catch(err)
-  {
-    postMessage("error","Error in Saveing data!!!")
-  }
+    console.log(companyData);
 
-  }
+    // push data to firebase to collection userInfo
+    const userId = state.user.email;
+
+    // setDoc(doc ref, data)
+    // doc(db ref, collection name, doc id)
+
+    try {
+      await setDoc(doc(db, "userInfo", userId), {
+        ...companyData,
+        userId,
+        userType: "employer",
+      });
+      postMessage("data saved successfully", "success");
+      // redirect to profile page
+      navigate("/employer/profile");
+    } catch (err) {
+      console.log(err);
+      postMessage("something went wrong", "error");
+    }
+  };
   return (
-    <form onSubmit={submitData}>
-      <div style={{float:'right',margin:"15px"}}>
-        <Button variant="contained" endIcon={<LogoutIcon />}>Logout</Button>
+    <form onSubmit={submitData} style={{margin:"15px"}}>
+      <div>
+        <Button variant="contained" endIcon={<LogoutIcon/>}>Logout</Button>
       </div>
-      <Grid className="grid-container" container spacing={2}>
+      <Grid className="grid-container" container  spacing={2}
+    
+      >
         <Grid className="grid-item" item xs={12} sm={6}>
-          <label>Company Name</label>
+          <label> Company Name</label>
           <TextField
             size="small"
             fullWidth
             required
-            disabled
+            value={companyData.companyName}
             sx={{
               fieldset: {
                 borderRadius: "10px",
                 border: "1px solid #00000036",
               },
             }}
-            value={userData.name}
-            onChange={(e) => { setUserData({ ...userData, name: e.target.value }) }}
-          ></TextField>
-        </Grid>
-
-        <Grid className="grid-item" item xs={12} sm={6}>
-          <label>Email Id</label>
-          <TextField
-            size="small"
-            fullWidth
-            required
-            disabled
-            sx={{
-              fieldset: {
-                borderRadius: "10px",
-                border: "1px solid #00000036",
-              },
-            }}
-            value={userData.email}
-            onChange={(e) => { setUserData({ ...userData, email: e.target.value }) }}
-          ></TextField>
-        </Grid>
-
-        <Grid className="grid-item" item xs={12} sm={6}>
-          <label>Phone No.</label>
-          <TextField
-            size="small"
-            fullWidth
-            required
-
-            sx={{
-              fieldset: {
-                borderRadius: "10px",
-                border: "1px solid #00000036",
-              },
-            }}
-            value={userData.phone}
-            onChange={(e) => { setUserData({ ...userData, phone: e.target.value }) }}
-          ></TextField>
-        </Grid>
-
-        <Grid className="grid-item" item xs={12} sm={6}>
-          <label>Primary Role</label>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            size="small"
-            fullWidth
-            value={userData.primaryRole}
-            
-            onChange={(e) => { setUserData({ ...userData, primaryRole: e.target.value }) }}
-          >
-            {primaryRole.map((item,index)=>{
-                return <MenuItem value={item} key={index}>{item}</MenuItem>
-            })}
-           
-          </Select>
-        </Grid>
-
-        <Grid className="grid-item" item xs={12} sm={6}>
-          <label>Linkedin ID</label>
-          <TextField
-            size="small"
-            fullWidth
-            required
-            type="url"
-            sx={{
-              fieldset: {
-                borderRadius: "10px",
-                border: "1px solid #00000036",
-              },
-            }}
-            value={userData.linkedin}
-            onChange={(e) => { setUserData({ ...userData, linkedin: e.target.value }) }}
-          ></TextField>
-        </Grid>
-
-        <Grid className="grid-item" item xs={12} sm={6}>
-          <label>Skills</label>
-          <SearchableDropDown
-          options={skills}
-          onChange={(newvalue)=>setSkills(newvalue)}
+            onChange={(e) => setcompanyData({ ...companyData, companyName: e.target.value })}
           />
-          <div className='skills-container'>
-        {
-          userData.skills.map((item)=>{
-            return <div 
-            onClick={()=>{setSkills(item)}}
-            >{item}</div>
-          })
-        }
-        </div>
         </Grid>
-
         <Grid className="grid-item" item xs={12} sm={6}>
-          <label>Experiance</label>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            size="small"
-            fullWidth
-            value={userData.experience}
-            
-            onChange={(e) => { setUserData({ ...userData, experience: e.target.value }) }}
-          >
-            {experience.map((item,index)=>{
-                return <MenuItem value={item} key={index}>{item}</MenuItem>
-            })}
-           
-          </Select>
-        </Grid>
-
-        <Grid className="grid-item" item xs={12} sm={6}>
-          <label>Expected Salary</label>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            size="small"
-            fullWidth
-            value={userData.expectedSalary}
-            
-            onChange={(e) => { setUserData({ ...userData, expectedSalary: e.target.value }) }}
-          >
-            {expectedSalary.map((item,index)=>{
-                return <MenuItem value={item} key={index}>{item}</MenuItem>
-            })}
-           
-          </Select>
-        </Grid>
-        <Grid className="grid-item" item xs={12} sm={12}>
-          <label>Bio</label>
+          <label>phone</label>
           <TextField
             size="small"
             fullWidth
-            multiline
-            minRows={5}
+            required
+            value={companyData.phone}
             sx={{
               fieldset: {
                 borderRadius: "10px",
                 border: "1px solid #00000036",
               },
             }}
-            value={userData.bio}
-            onChange={(e) => { setUserData({ ...userData, bio: e.target.value }) }}
-          ></TextField>
+            onChange={(e) =>
+              setcompanyData({ ...companyData, phone: e.target.value })
+            }
+          />
         </Grid>
-        <Grid className="grid-item" item xs={12} >
-          <label>Resume </label>
-         <UploadFile
-         type="doc"
-         onUpload={(url) => setUserData({ ...userData, resume: url })}
-         value={userData.resume}
-         />
+        <Grid className="grid-item" item xs={12} sm={6}>
+          <label>Industry Type</label>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={companyData.industryType}
+            size="small"
+            fullWidth
+            onChange={(e) =>
+              setcompanyData({ ...companyData, industryType: e.target.value })
+            }
+          >
+            {industryType.map((item) => {
+              return <MenuItem value={item}>{item}</MenuItem>;
+            })}
+          </Select>
+        </Grid>
+        <Grid className="grid-item" item xs={12} sm={6}>
+          <label>Comapny size</label>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={companyData.companySize}
+            size="small"
+            fullWidth
+            onChange={(e) =>
+              setcompanyData({ ...companyData, companySize: e.target.value })
+            }
+          >
+            {companySize.map((item) => {
+              return <MenuItem value={item}>{item}</MenuItem>;
+            })}
+          </Select>
+        </Grid>
+        <Grid className="grid-item" item xs={12} sm={6}>
+          <label>Name </label>
+          <TextField
+            disabled
+            size="small"
+            fullWidth
+            required
+            value={companyData.name}
+            sx={{
+              fieldset: {
+                borderRadius: "10px",
+                border: "1px solid #00000036",
+              },
+            }}
+            onChange={(e) =>
+              setcompanyData({ ...companyData, name: e.target.value })
+            }
+          />
+        </Grid>
+
+        <Grid className="grid-item" item xs={12} sm={6}>
+          <label>Email</label>
+          <TextField
+            disabled
+            size="small"
+            type={"email"}
+            fullWidth
+            required
+            value={companyData.email}
+            sx={{
+              fieldset: {
+                borderRadius: "10px",
+                border: "1px solid #00000036",
+              },
+            }}
+            onChange={(e) =>
+              setcompanyData({ ...companyData, email: e.target.value })
+            }
+          />
+        </Grid>
+        <Grid className="grid-item" item xs={12} sm={6}>
+          <label>Role</label>
+          <TextField
+            
+            size="small"
+          
+            fullWidth
+            required
+            value={companyData.role}
+            sx={{
+              fieldset: {
+                borderRadius: "10px",
+                border: "1px solid #00000036",
+              },
+            }}
+            onChange={(e) =>
+              setcompanyData({ ...companyData, role: e.target.value })
+            }
+          />
+        </Grid>
+        
+        <Grid className="grid-item" item xs={12} sm={6}>
+          <label>Company Website </label>
+          <TextField
+            size="small"
+            type="url"
+            fullWidth
+            value={companyData.companyWebsite}
+            sx={{
+              fieldset: {
+                borderRadius: "10px",
+                border: "1px solid #00000036",
+              },
+            }}
+            onChange={(e) =>
+              setcompanyData({ ...companyData, companyWebsite: e.target.value })
+            }
+          />
+        </Grid>
+     
+        <Grid className="grid-item" item xs={12} sm={6}>
+          <label>linkedin </label>
+          <TextField
+            size="small"
+            type="url"
+            fullWidth
+            value={companyData.linkedin}
+            sx={{
+              fieldset: {
+                borderRadius: "10px",
+                border: "1px solid #00000036",
+              },
+            }}
+            onChange={(e) =>
+              setcompanyData({ ...companyData, linkedin: e.target.value })
+            }
+          />
+        </Grid>
+        <Grid className="grid-item" item xs={12}>
+          <label>Comapny tag</label>
+          <TextField
+            size="small"
+           
+            fullWidth
+            required
+            value={companyData.companyTag}
+            sx={{
+              fieldset: {
+                borderRadius: "10px",
+                border: "1px solid #00000036",
+              },
+            }}
+            onChange={(e) => setcompanyData({ ...companyData, companyTag: e.target.value })}
+          />
+        </Grid>
+        <Grid className="grid-item" item xs={12}>
+          <label>Company bio</label>
+          <TextField
+            size="small"
+            multiline
+            minRows={4}
+            fullWidth
+            required
+            value={companyData.companyBio}
+            sx={{
+              fieldset: {
+                borderRadius: "10px",
+                border: "1px solid #00000036",
+              },
+            }}
+            onChange={(e) => setcompanyData({ ...companyData, companyBio: e.target.value })}
+          />
+        </Grid>
+        <Grid className="grid-item" item xs={12}>
+          <label>Company logo</label>
+          <UploadFile
+            type="image"
+            onUpload={(url) => setcompanyData({ ...companyData, companyLogo: url })}
+            value={companyData.companyLogo}
+          />
         </Grid>
         <Grid
           sx={{
@@ -247,12 +291,12 @@ function Onboarding() {
           item
           xs={12}
         >
-          <Button variant="contained" type="sumbit">Submit</Button>
+          <Button type="sumbit" variant="contained">Complete Setup</Button>
         </Grid>
       </Grid>
-
     </form>
-  )
+  );
 }
 
-export default Onboarding
+export default Onboarding;
+

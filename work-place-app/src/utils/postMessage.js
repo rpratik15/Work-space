@@ -4,4 +4,8 @@ if(type==="success")
 {
     alert(message)
 }
+else
+{
+    alert(message)
+}
 }
