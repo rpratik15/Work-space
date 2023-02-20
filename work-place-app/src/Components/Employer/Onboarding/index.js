@@ -57,7 +57,7 @@ function Onboarding() {
         userId,
         userType: "employer",
       });
-      postMessage("data saved successfully", "success");
+      postMessage("Data saved successfully!!!", "success");
       // redirect to profile page
       navigate("/employer/profile");
     } catch (err) {

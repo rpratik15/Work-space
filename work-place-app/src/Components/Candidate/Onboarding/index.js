@@ -9,9 +9,11 @@ import UploadFile from '../../common/UploadFile';
 import {db} from "../../../firebaseconfig"
 import { setDoc,doc } from "firebase/firestore";
 import {postMessage} from "../../../utils/postMessage"
+import { useNavigate } from 'react-router-dom';
 
 
 function Onboarding() {
+  const navigate=useNavigate()
   const [state, dispatch] = useContext(userContext)
   const [userData, setUserData] = useState({
     name: state.user.displayName,
@@ -50,17 +52,18 @@ function Onboarding() {
     try
     {
     const userId=state.user.email
-    await setDoc(doc(db,"userinfo",userId),
+    await setDoc(doc(db,"userInfo",userId),
     {
       ...userData,
       userId,
       userType:'candidate'
     })
     postMessage("success","Data Save Successfully!!!")
+    navigate("/candidate/profile");
   }
   catch(err)
   {
-    postMessage("error","Error in Saveing data!!!")
+    postMessage("error","Error in Saving data!!!")
   }
 
   }

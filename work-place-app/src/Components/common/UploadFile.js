@@ -30,7 +30,7 @@ function UploadFile({type, onUpload, value}) {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log('File available at', downloadURL);
           onUpload(downloadURL);
-          setProgress(0)
+          //setProgress(0)
         });
       }
     );
