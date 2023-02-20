@@ -64,12 +64,17 @@ function Profile() {
     postMessage("error","Error in Saving data!!!")
   }
 
+
+  }
+
+  const saveData=()=>{
+   
   }
   return (
     <form onSubmit={submitData}>
       <div style={{float:'right',margin:"15px"}}>
         <Button variant="contained" endIcon={<LogoutIcon />}>Logout</Button>
-        <Button variant="contained" type="sumbit">{disableField?"Edit":"Save"}</Button>
+        <Button variant="contained" onClick={saveData}>{disableField?"Edit":"Save"}</Button>
       </div>
       <Grid className="grid-container" container spacing={2}>
         <Grid className="grid-item" item xs={12} sm={6}>
@@ -169,12 +174,13 @@ function Profile() {
           <SearchableDropDown
           options={skills}
           onChange={(newvalue)=>setSkills(newvalue)}
+          disabled={disableField}
           />
           <div className='skills-container'>
         {
           userData.skills.map((item)=>{
             return <div 
-            onClick={()=>{setSkills(item)}}
+            onClick={()=>{!disableField && setSkills(item)}}
             >{item}</div>
           })
         }
