@@ -5,7 +5,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../.././firebaseconfig"
 
 
-function UploadFile({type, onUpload, value}) {
+function UploadFile({type, onUpload, value,disabled}) {
   const [progress,setProgress]=useState(0);
   const upload = (e) => {
     const file = e.target.files[0]
@@ -41,6 +41,7 @@ function UploadFile({type, onUpload, value}) {
         size="small"
         fullWidth
         type="file"
+        disabled={disabled}
         inputProps={{
           accept: type === "doc" ? ".doc,.docx,.pdf" : ".jpg,.jpeg,.png",
           // accept: ".doc,.docx,.pdf"

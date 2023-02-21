@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import "./Profile.css"
 import { Button, Grid, MenuItem, Select, TextField } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -7,11 +7,14 @@ import { primaryRole, skills,experience,expectedSalary } from '../../../constant
 import SearchableDropDown from "../../common/SearchableDropDown"
 import UploadFile from '../../common/UploadFile';
 import {db} from "../../../firebaseconfig"
-import { setDoc,doc } from "firebase/firestore";
+import { setDoc,doc,getDoc } from "firebase/firestore";
 import {postMessage} from "../../../utils/postMessage"
+import { useNavigate } from 'react-router-dom';
+
 
 
 function Profile() {
+  const navigate=useNavigate();
   const [state, dispatch] = useContext(userContext)
   const [disableField,setDisableField]=useState(true)
   const [userData, setUserData] = useState({
@@ -27,6 +30,23 @@ function Profile() {
     expectedSalary: "",
   })
 
+  const fetchUserData= async()=>{
+    const userId = state.user.email;
+  const docRef = doc(db,"userInfo",userId);
+  const docSnap = await getDoc(docRef);
+  
+  if (docSnap.exists()) {
+    //console.log("Document data:", docSnap.data());
+    setUserData(docSnap.data())
+  } else {
+    // doc.data() will be undefined in this case
+    console.log("No such document!");
+  }
+  }
+  useEffect(()=>{
+    fetchUserData()
+
+  },[])
   const setSkills=(skill)=>{
 
     if(userData.skills.includes(skill))
@@ -46,7 +66,7 @@ function Profile() {
   }
 
   const submitData= async(e)=>{
-    e.preventDefault();
+    // e.preventDefault();
     console.log(userData)
     try
     {
@@ -68,7 +88,13 @@ function Profile() {
   }
 
   const saveData=()=>{
-   
+    if (disableField) {
+      setDisableField(false);
+    } else {
+      // call firebase function to save data
+      submitData();
+      setDisableField(true);
+    }
   }
   return (
     <form onSubmit={submitData}>
@@ -229,7 +255,7 @@ function Profile() {
             fullWidth
             multiline
             disabled={disableField}
-            minRows={5}
+            minRows={4}
             sx={{
               fieldset: {
                 borderRadius: "10px",

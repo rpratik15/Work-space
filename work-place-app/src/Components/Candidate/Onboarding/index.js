@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState,useEffect } from 'react'
 import "./onboarding.css"
 import { Button, Grid, MenuItem, Select, TextField } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -7,13 +7,16 @@ import { primaryRole, skills,experience,expectedSalary } from '../../../constant
 import SearchableDropDown from "../../common/SearchableDropDown"
 import UploadFile from '../../common/UploadFile';
 import {db} from "../../../firebaseconfig"
-import { setDoc,doc } from "firebase/firestore";
+import { setDoc,doc,getDoc } from "firebase/firestore";
+
+
 import {postMessage} from "../../../utils/postMessage"
 import { useNavigate } from 'react-router-dom';
 
 
 function Onboarding() {
   const navigate=useNavigate()
+
   const [state, dispatch] = useContext(userContext)
   const [userData, setUserData] = useState({
     name: state.user.displayName,
@@ -28,6 +31,25 @@ function Onboarding() {
     expectedSalary: "",
   })
 
+const fetchUserData= async()=>{
+  const userId = state.user.email;
+  const docRef = doc(db,"userInfo",userId);
+  const docSnap = await getDoc(docRef);
+  
+  if (docSnap.exists()) {
+    //console.log("Document data:", docSnap.data());
+    navigate("/candidate/profile");
+  } else {
+    // doc.data() will be undefined in this case
+    console.log("No such document!");
+  }
+}
+  useEffect(() => {
+   
+  fetchUserData()
+
+  }, [])
+  
   const setSkills=(skill)=>{
 
     if(userData.skills.includes(skill))
