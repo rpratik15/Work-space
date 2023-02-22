@@ -10,11 +10,13 @@ import {db} from "../../../firebaseconfig"
 import { setDoc,doc,getDoc } from "firebase/firestore";
 import {postMessage} from "../../../utils/postMessage"
 import { useNavigate } from 'react-router-dom';
+import FileLoading from '../../common/Skeleton/FileLoading'
 
 
 
 function Profile() {
   const navigate=useNavigate();
+  const [loading,setLoading]=useState(false)
   const [state, dispatch] = useContext(userContext)
   const [disableField,setDisableField]=useState(true)
   const [userData, setUserData] = useState({
@@ -31,6 +33,7 @@ function Profile() {
   })
 
   const fetchUserData= async()=>{
+    setLoading(true)
     const userId = state.user.email;
   const docRef = doc(db,"userInfo",userId);
   const docSnap = await getDoc(docRef);
@@ -42,6 +45,7 @@ function Profile() {
     // doc.data() will be undefined in this case
     console.log("No such document!");
   }
+  setLoading(false)
   }
   useEffect(()=>{
     fetchUserData()
@@ -97,6 +101,7 @@ function Profile() {
     }
   }
   return (
+    loading?<FileLoading fields={10}/>:
     <form onSubmit={submitData}>
       <div style={{float:'right',margin:"15px"}}>
         <Button variant="contained" endIcon={<LogoutIcon />}>Logout</Button>

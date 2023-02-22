@@ -1,5 +1,5 @@
 import { Button, Grid, MenuItem, Select, TextField } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState,useEffect } from "react";
 import "./Profile.css";
 import {
   companySize,
@@ -9,7 +9,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import UploadFile from "../../common/UploadFile";
 import { userContext } from "../../../context/userContext";
 import { db } from "../../../firebaseconfig";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc,getDoc } from "firebase/firestore";
 import {postMessage} from "../../../utils/postMessage";
 import { useNavigate } from "react-router-dom";
 function Profile() {
@@ -77,6 +77,24 @@ function Profile() {
       setDisableField(true);
     }
   }
+
+  const fetchUserData= async()=>{
+    const userId = state.user.email;
+  const docRef = doc(db,"userInfo",userId);
+  const docSnap = await getDoc(docRef);
+  
+  if (docSnap.exists()) {
+    //console.log("Document data:", docSnap.data());
+    setcompanyData(docSnap.data())
+  } else {
+    // doc.data() will be undefined in this case
+    console.log("No such document!");
+  }
+  }
+  useEffect(()=>{
+    fetchUserData()
+
+  },[])
   return (
     <form onSubmit={submitData} style={{margin:"15px"}}>
        <div style={{float:'right',margin:"15px"}}>

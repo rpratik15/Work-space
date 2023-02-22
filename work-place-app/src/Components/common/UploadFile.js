@@ -3,6 +3,8 @@ import { TextField } from '@mui/material'
 import CircularProgressWithLabel from "./CircularProgressWithLabel"
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../.././firebaseconfig"
+import  pdf from "../../assets/pdf.png"
+import  image from "../../assets/image.png"
 
 
 function UploadFile({type, onUpload, value,disabled}) {
@@ -30,13 +32,19 @@ function UploadFile({type, onUpload, value,disabled}) {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log('File available at', downloadURL);
           onUpload(downloadURL);
-          //setProgress(0)
+          setProgress(0)
         });
       }
     );
   }
   return (
     <div style={{ gap: "20px"}}>
+       {
+        value?(type==="doc"?
+        <a href={value} target="_blank"><img width={'50px'} src={pdf} alt="PDF"></img></a>:
+        <a href={value} target="_blank"><img width={'50px'} src={image} alt=""></img></a>):
+        <h2> Please Upload the file  </h2>
+       }
       <TextField
         size="small"
         fullWidth
@@ -49,9 +57,15 @@ function UploadFile({type, onUpload, value,disabled}) {
         }}
         onChange={(e) => upload(e)}
       ></TextField>
-      <div style={{marginTop:"10px"}}>
-       <CircularProgressWithLabel value={progress} />
-       </div>
+      {
+        progress>0?( <div style={{marginTop:"10px"}}>
+        <CircularProgressWithLabel value={progress} />
+        </div>):null
+      }
+     
+
+      
+      
     </div>
   )
 }

@@ -260,6 +260,7 @@ const fetchUserData= async()=>{
          type="doc"
          onUpload={(url) => setUserData({ ...userData, resume: url })}
          value={userData.resume}
+        
          />
         </Grid>
         <Grid
