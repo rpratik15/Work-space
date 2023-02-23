@@ -41,8 +41,8 @@ function UploadFile({type, onUpload, value,disabled}) {
     <div style={{ gap: "20px"}}>
        {
         value?(type==="doc"?
-        <a href={value} target="_blank"><img width={'50px'} src={pdf} alt="PDF"></img></a>:
-        <a href={value} target="_blank"><img width={'50px'} src={image} alt=""></img></a>):
+        <a href={value} target="_blank" rel="noreferrer"><img width={'50px'} src={pdf} alt="PDF"></img></a>:
+        <a href={value} target="_blank" rel="noreferrer"><img width={'50px'} src={image} alt=""></img></a>):
         <h2> Please Upload the file  </h2>
        }
       <TextField

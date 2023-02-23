@@ -67,24 +67,24 @@ function Onboarding() {
       postMessage("something went wrong", "error");
     }
   };
-  const fetchUserData= async()=>{
-    const userId = state.user.email;
-    const docRef = doc(db,"userInfo",userId);
-    const docSnap = await getDoc(docRef);
+  // const fetchUserData= async()=>{
+  //   const userId = state.user.email;
+  //   const docRef = doc(db,"userInfo",userId);
+  //   const docSnap = await getDoc(docRef);
     
-    if (docSnap.exists()) {
-      //console.log("Document data:", docSnap.data());
-      navigate("/employer/profile");
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-    }
-  }
-    useEffect(() => {
+  //   if (docSnap.exists()) {
+  //     //console.log("Document data:", docSnap.data());
+  //     navigate("/employer/profile");
+  //   } else {
+  //     // doc.data() will be undefined in this case
+  //     console.log("No such document!");
+  //   }
+  // }
+  //   useEffect(() => {
      
-    fetchUserData()
+  //   fetchUserData()
   
-    }, [])
+  //   }, [])
   return (
     <form onSubmit={submitData} style={{margin:"15px"}}>
       <div>

@@ -209,7 +209,7 @@ function Profile() {
           />
           <div className='skills-container'>
         {
-          userData.skills.map((item)=>{
+          userData.skills?.map((item)=>{
             return <div 
             onClick={()=>{!disableField && setSkills(item)}}
             >{item}</div>

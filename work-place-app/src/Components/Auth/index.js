@@ -4,9 +4,11 @@ import "./auth.css"
 import { Button, Grid, Pagination } from "@mui/material";
 import authimg from "../../assets/authimg.png";
 import googlebtn from "../../assets/google-btn.png";
-import { auth } from "../../firebaseconfig"
+import { auth, db } from "../../firebaseconfig"
+import { doc, getDoc } from "firebase/firestore";
 import {userContext} from "../../context/userContext"
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { async } from '@firebase/util';
 
 
 
@@ -15,31 +17,26 @@ function Auth({ type }) {
   const [state, dispatch] = useContext(userContext);
   const navigate=useNavigate()
 
-  const  redirectUser=()=>{
-   
-    if (false) // user exists
+  const  redirectUser=async(email)=>{
+   const docRef=doc(db,"userInfo",email)
+   const userData= await getDoc(docRef)
+   let userInformation=null
+   if(userData.exists())
+   {
+    userInformation=userData.data()
+    console.log(userInformation)
+   }
+    if (userInformation) // user exists
     {
-      if (false) // user exist as candidate but trying to login as employer
+      if (userInformation.userType===type) // user exist check its type
        {
-        //alert user he exist as candidate
-      } else if (
-        // user exist as employer but trying to login as candidate
-        false
-      ) {
-        //alert user he exist as employer
-      } else if (
-        // user exist as candidate and trying to login as candidate
-        true
-      ) {
-        // redirect to candidate profile
-        navigate("/candidate/profile");
-      } else if (
-        // user exist as employer and trying to login as employer
-        true
-      ) {
-        // redirect to employer profile
-        navigate("/employer/profile");
-      }
+        dispatch({
+          type:"ADDUSERINFO",
+          payload:userInformation
+        })
+        navigate(`/${type}/profile`);
+      } 
+      
     } 
     else
     {
@@ -69,7 +66,7 @@ function Auth({ type }) {
             displayName, email, photoURL, uid
           }
         })
-        redirectUser();
+        redirectUser(email);
       }).catch((error) => {
         console.log(error)
       });
@@ -81,7 +78,7 @@ function Auth({ type }) {
     <Grid container>
       <Grid className="auth-btn-container" item xs={12} md={8}>
         <h1>welcome {type}</h1>
-        <h3>please Sign IN</h3>
+        <h3>Please Sign IN</h3>
         <div onClick={singIn} className="auth-btn">
           <img src={googlebtn} alt="googlebtn" />
         </div>
