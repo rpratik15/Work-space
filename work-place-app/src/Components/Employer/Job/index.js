@@ -5,27 +5,38 @@ import { Grid } from '@mui/material'
 
 function Job() {
   const [mobileView,setMobileView]=useState(false)
+  const [selectedJob,setSelectedJob]=useState(null)
   const postAJob=()=>{
     setMobileView(true)
   }
 
-  const selectedJob=()=>{
+  const selectedJobFun=(item)=>{
     setMobileView(true)
+    setSelectedJob(item)
   }
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={2}
+    sx={{
+      margin:'5px auto',
+      maxWidth:{xs:'95%',md:'95%'}
+    }}
+    >
       <Grid 
       sx={{
-        display:{xs:mobileView?"none":"block", md:'block'}
+        display:{xs:mobileView?"none":"block", md:'block'},
+        background: '#fff',
+        padding:'12px'
+
+
       }}
-      item xs={12} md={3}>
-      <Sidebar postAJob={postAJob} selectedJob={selectedJob}/>
+      item xs={12} md={4}>
+      <Sidebar postAJob={postAJob} selectedJob={selectedJob}  selectedJobFun={selectedJobFun}/>
       </Grid>
       <Grid 
        sx={{
         display:{xs:mobileView?"block":"none", md:'block'}
       }}
-      item xs={12} md={9}>
+      item xs={12} md={8}>
         <Forms setMobileView={setMobileView}/>
       </Grid>
     </Grid>

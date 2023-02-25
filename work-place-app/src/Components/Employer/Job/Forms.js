@@ -1,10 +1,11 @@
 import { Button } from '@mui/material'
 import React from 'react'
 
+
 function Forms({setMobileView}) {
   return (
     <div>
-        <Button variant="contained"
+        <Button variant="contained" 
         sx={{
             display:{xs:'block',md:'none'},
             width:"100%"
@@ -13,6 +14,7 @@ function Forms({setMobileView}) {
             Back
         </Button>
         Forms</div>
+ 
   )
 }
 
