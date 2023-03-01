@@ -85,3 +85,9 @@ export const skills=[
     '5000+',
   
   ]
+
+  export const currency=[
+    'INR',
+    'DOLLER',
+    'DINAR'
+  ]

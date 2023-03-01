@@ -1,10 +1,13 @@
 import { Button, TextField } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import './Job.css'
 import SideJobCard from './SideJobCard';
+import {userContext} from '../../../context/userContext'
 
 function Sidebar({postAJob,selectedJob,selectedJobFun}) {
+  const [state,dispatch]=useContext(userContext)
+  
     
   return (
 
