@@ -26,6 +26,7 @@ function Forms({ setMobileView }) {
       },
       skills: [],
       experience: "",
+     
 
     })
     const setSkills = (skill) => {
@@ -56,9 +57,12 @@ function Forms({ setMobileView }) {
         //data
         {...data,
           employerId:state.user.email,
-          companyName:state.user?.companyName,
-          companyTag:state.user?.companyTag,
-          companySize:state.user?.companySize,
+          companyName:state.userInfo?.companyName,
+          companyTag:state.userInfo?.companyTag,
+          companySize:state.userInfo?.companySize,
+          jobId,
+          createdAt: new Date(),
+          companyLogo:state.userInfo?.companyLogo
         }
       )
       postMessage("success","Data Save Successfully!!!")
@@ -162,6 +166,7 @@ function Forms({ setMobileView }) {
                 fullWidth
                 value={data.currency}
                 placeholder='Currency'
+                defaultValue='INR'
                 disabled={disabledField}
                 onChange={(e) => { setData({ ...data, currency: e.target.value }) }}
               >

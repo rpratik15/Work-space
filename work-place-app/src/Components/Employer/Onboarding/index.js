@@ -31,18 +31,18 @@ function Onboarding() {
     companyLogo: "",
     
   });
-  const setSkills = (skill) => {
-    //if skill is already present in the array then remove it
-    // else add it
-    if (companyData.skills.includes(skill)) {
-      setcompanyData({
-        ...companyData,
-        skills: companyData.skills.filter((item) => item !== skill),
-      });
-    } else {
-      setcompanyData({ ...companyData, skills: [...companyData.skills, skill] });
-    }
-  };
+  // const setSkills = (skill) => {
+  //   //if skill is already present in the array then remove it
+  //   // else add it
+  //   if (companyData.skills.includes(skill)) {
+  //     setcompanyData({
+  //       ...companyData,
+  //       skills: companyData.skills.filter((item) => item !== skill),
+  //     });
+  //   } else {
+  //     setcompanyData({ ...companyData, skills: [...companyData.skills, skill] });
+  //   }
+  // };
   const submitData = async (e) => {
     e.preventDefault();
     console.log(companyData);
@@ -60,6 +60,10 @@ function Onboarding() {
         userType: "employer",
       });
       postMessage("Data saved successfully!!!", "success");
+      dispatch({
+        type: "AddUSERINFO",
+        payload: { ...companyData, userId, userType: "employer" },
+      });
       // redirect to profile page
       navigate("/employer/profile");
     } catch (err) {
