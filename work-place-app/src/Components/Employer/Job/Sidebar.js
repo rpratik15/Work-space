@@ -60,6 +60,8 @@ function Sidebar({ postAJob, selectedJob, selectedJobFun }) {
 
 
         }}
+
+        onChange={()=>{}}
       ></TextField>
 
       

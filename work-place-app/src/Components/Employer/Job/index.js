@@ -8,12 +8,18 @@ function Job() {
   const [selectedJob,setSelectedJob]=useState(null)
   const postAJob=()=>{
     setMobileView(true)
+    setSelectedJob(null)
+   
   }
 
   const selectedJobFun=(item)=>{
     setMobileView(true)
     setSelectedJob(item)
+    // console.log(item)
   }
+
+
+  
   return (
     <Grid container spacing={2}
     sx={{
@@ -37,7 +43,7 @@ function Job() {
         display:{xs:mobileView?"block":"none", md:'block'}
       }}
       item xs={12} md={8}>
-        <Forms setMobileView={setMobileView}/>
+        <Forms selectedJob={selectedJob} setMobileView={setMobileView}/>
       </Grid>
     </Grid>
   )

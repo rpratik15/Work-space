@@ -1,5 +1,5 @@
 import { Button, Grid, Select, TextField, MenuItem} from '@mui/material'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {setDoc,doc} from 'firebase/firestore' 
 import { db } from '../../../firebaseconfig'
 import { v4 as uuidv4 } from 'uuid'
@@ -9,26 +9,24 @@ import './Job.css'
 import {userContext} from '../../../context/userContext'
 import {postMessage} from "../../../utils/postMessage"
 
-function Forms({ setMobileView }) {
+function Forms({ setMobileView,selectedJob }) {
+  const initialState={
+    jobTitle: "",
+    jobDescription: "",
+    jobType: "",
+    primaryRole: "",
+    jobLocation: "",
+    salaryRange: {
+      currency: "",
+      min: "",
+      max: "",
+    },
+    skills: [],
+    experience: ""
+  }
   const [disabledField, setDisabledField] = React.useState(false);
   const [state,dispatch]=useContext(userContext)
-  const [data, setData] = useState(
-    {
-      jobTitle: "",
-      jobDescription: "",
-      jobType: "",
-      primaryRole: "",
-      jobLocation: "",
-      salaryRange: {
-        currency: "",
-        min: "",
-        max: "",
-      },
-      skills: [],
-      experience: "",
-     
-
-    })
+  const [data, setData] = useState(initialState)
     const setSkills = (skill) => {
       //if skill is already present in the array then remove it
       // else add it
@@ -44,7 +42,8 @@ function Forms({ setMobileView }) {
     };
 
     const submit=async(e)=>{
-      const jobId=uuidv4()
+      
+      const jobId= selectedJob?selectedJob.jobId: uuidv4()
       e.preventDefault();
       try
       {
@@ -63,15 +62,27 @@ function Forms({ setMobileView }) {
           jobId,
           createdAt: new Date(),
           companyLogo:state.userInfo?.companyLogo
-        }
+        },{ merge: true }
       )
-      postMessage("success","Data Save Successfully!!!")
+      postMessage("Success","Data Save Successfully!!!")
       }
       catch(e)
       {
         console.log(e)
       }
     }
+
+    useEffect(()=>{
+        if(selectedJob)
+        {
+          setData(selectedJob)
+        }
+        else
+        {
+         
+          setData(initialState)
+        }
+    },[selectedJob])
   return (
     <form onSubmit={(e)=>submit(e)}>
       <Button variant="contained"
@@ -283,7 +294,11 @@ function Forms({ setMobileView }) {
           item
           xs={12}
         >
-          <Button variant="contained" type="sumbit" className='post-form-btn'>Post Job</Button>
+          <Button variant="contained" type="sumbit" className='post-form-btn'>
+            {
+              selectedJob?"SAVE":"POST JOB"
+            }
+            </Button>
         </Grid>
       </Grid>
     </form>

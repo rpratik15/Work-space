@@ -25,12 +25,8 @@ function Navs() {
 
     // isAuth is a boolean value
     if (isAuth) {
-      return (
-        <div>
-          <CandidateNavBar />
-          <Outlet />
-        </div>
-      )
+      return <Outlet />
+      
     }
     else {
       return <Navigate to="/candidate/auth" />
@@ -49,8 +45,10 @@ function Navs() {
       return <Navigate to="/employer/auth" />
     }
   }
-  const Navbar = (type) => {
+  const Navbar = ({type}) => {
+   
     if (type === 'candidate') {
+      
       return (
         <div>
           <CandidateNavBar/>
@@ -60,6 +58,7 @@ function Navs() {
 
     }
     else {
+      
       return (
         <div>
           <EmployerNavBar/>
@@ -74,11 +73,11 @@ function Navs() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/candidate/auth" element={<Auth type={'candidate'} />} />
 
+        <Route path="/candidate/auth" element={<Auth type={'candidate'} />} />
         <Route element={<CandidateProtected />}>
           <Route path="/candidate/onboarding" element={<Onboarding />} />
-          <Route element={<Navbar type={'candidate'} />} >
+          <Route element={<Navbar type='candidate' />} >
             <Route path="/candidate/profile" element={<Profile />} />
             <Route path="/candidate/jobs" element={<Job />} />
             <Route path="/candidate/applications" element={<Applications />} />
@@ -89,7 +88,7 @@ function Navs() {
         <Route path="/employer/auth" element={<Auth type={'employer'} />} />
         <Route element={<EmployerProtected />}>
           <Route path="/employer/onboarding" element={<EmployerOnboarding />} />
-          <Route element={<Navbar type={'employer'} />}>
+          <Route element={<Navbar type='employer' />}>
             <Route path="/employer/profile" element={<EmployerProfile />} />
             <Route path="/employer/job" element={<EmployerJob />} />
             <Route path="/employer/applicants" element={<EmployerApplicants />} />
