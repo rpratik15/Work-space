@@ -10,7 +10,9 @@ import { db } from '../../../firebaseconfig'
 
 function Sidebar({ postAJob, selectedJob, selectedJobFun }) {
   const  [allJobs,setAllJobs]=useState(null)
+  const [filteredJobs,setFilteredJobs]=useState(null)
   const [state, dispatch] = useContext(userContext)
+  const [search,setSearch]=useState('')
   const fetchAll = async () => {
     const currentUserId = state.user.email
     // const jobsRef = await collection(db, "jobs");
@@ -21,10 +23,11 @@ function Sidebar({ postAJob, selectedJob, selectedJobFun }) {
           jobs.push(doc.data());
       });
       setAllJobs(jobs)
-      console.log(allJobs)
+      setFilteredJobs(jobs)
+      //console.log(allJobs)
     });
     
-  //  return ()=>unsubscribe //use to stop listner after unmounting componant
+   return ()=>unsubscribe //use to stop listner after unmounting componant
   }
 
   useEffect(()=>{
@@ -32,6 +35,14 @@ function Sidebar({ postAJob, selectedJob, selectedJobFun }) {
   
 },[])
 
+const filterTheJobs=(e)=>{
+  setSearch(e.target.value)
+  const jobs=allJobs.filter((item)=>
+        item.jobTitle.toLowerCase().startsWith (e.target.value.toLowerCase())
+  )
+  setFilteredJobs(jobs)
+  console.log(filterTheJobs)
+}
   return (
 
     <div className='sidebar-panel'>
@@ -43,6 +54,8 @@ function Sidebar({ postAJob, selectedJob, selectedJobFun }) {
       <TextField
         size="small"
         fullWidth
+        value={search}
+        onChange={filterTheJobs}
         placeholder='Search by job title'
         sx={{
           '& fieldset': {
@@ -62,17 +75,18 @@ function Sidebar({ postAJob, selectedJob, selectedJobFun }) {
         }}
 
         
-      ></TextField>
+      />
 
       
       {
-        allJobs && allJobs.length==0?(
+        
+        filteredJobs && filteredJobs.length===0?(
           <div>No Data Present</div>
 
-        ):allJobs && allJobs.length>0?(<div>
+        ):filteredJobs && filteredJobs.length>0?(<div>
           {
             
-           allJobs?.map((item, i) => {
+            filteredJobs?.map((item, i) => {
   
               return <SideJobCard selectedJob={selectedJob} selectedJobFun={selectedJobFun} item={item} index={i} />
   

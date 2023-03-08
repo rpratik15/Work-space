@@ -43,7 +43,7 @@ function Profile() {
     }
   };
   const submitData = async (e) => {
-    e.preventDefault();
+   // e.preventDefault();
     console.log(companyData);
 
     // push data to firebase to collection userInfo

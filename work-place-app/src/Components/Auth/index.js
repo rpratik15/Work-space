@@ -24,7 +24,7 @@ function Auth({ type }) {
    if(userData.exists())
    {
     userInformation=userData.data()
-    console.log(userInformation)
+     console.log(userInformation)
    }
     if (userInformation) // user exists
     {
@@ -36,6 +36,10 @@ function Auth({ type }) {
         })
         navigate(`/${type}/profile`);
       } 
+      else
+      {
+        alert(`You are register as ${userInformation.userType} & trying with ${type} Id ` )
+      }
       
     } 
     else

@@ -56,11 +56,26 @@ box-shadow: -2px 3px 5px 0px grey !important;
   
   color: #959595;
   }
-
-.post-form-btn
-{
-  width: 200px;
-}
+  .job-info{
+    border: 1px solid #D4D4D4;
+    border-radius: 7px;
+    max-width: 95%;
+    margin: 15px auto;
+    padding: 10px;
+    text-align: left;
+    align-items: center;
+  }
+  .apply-btn{
+    background: #26D7AB;
+  border-radius: 5px;
+  color: #FFFFFF;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  margin: 5px auto;
+  cursor: pointer;
+  
+  }
 
 @media screen and (max-width: 750px) {
  .post-form-btn{
