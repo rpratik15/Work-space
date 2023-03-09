@@ -43,7 +43,7 @@ function JobsCards({ job,applyonJob}) {
       <Grid xs={12} md={2}>
         <button
         // onClick={()=>applyonJob(job)}
-        className="apply-btn" onClick={applyonJob}>Apply</button>
+        className="apply-btn" onClick={()=>applyonJob(job)}>Apply</button>
       </Grid>
     </Grid>
   </div>

@@ -44,11 +44,7 @@ function Onboarding() {
 //     console.log("No such document!");
 //   }
 // }
-//   useEffect(() => {
-   
-//   fetchUserData()
 
-//   }, [])
   
   const setSkills=(skill)=>{
 

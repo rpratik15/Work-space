@@ -80,6 +80,7 @@ function Profile() {
 
   const fetchUserData= async()=>{
     const userId = state.user.email;
+  
   const docRef = doc(db,"userInfo",userId);
   const docSnap = await getDoc(docRef);
   

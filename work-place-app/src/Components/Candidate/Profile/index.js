@@ -49,7 +49,7 @@ function Profile() {
   }
   useEffect(()=>{
     fetchUserData()
-
+   
   },[])
   const setSkills=(skill)=>{
 
