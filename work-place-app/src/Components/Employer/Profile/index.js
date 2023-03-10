@@ -59,6 +59,10 @@ function Profile() {
         userType: "employer",
       });
       postMessage("Data saved successfully!!!", "success");
+      dispatch({
+        type: "AddUSERINFO",
+        payload: { ...companyData, userId, userType: "employer" },
+      });
       // redirect to profile page
       navigate("/employer/profile");
     } catch (err) {

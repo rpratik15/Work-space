@@ -77,6 +77,14 @@ function Onboarding() {
       userType:'candidate'
     })
     postMessage("success","Data Save Successfully!!!")
+    dispatch({
+      type:'AddUSERINFO',
+      payload:{
+        ...userData,
+        userId,
+        userType: "candidate",
+      }
+    })
     navigate("/candidate/profile");
   }
   catch(err)

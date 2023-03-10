@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { collection, query, getDocs, doc, setDoc,getDoc } from "firebase/firestore";
+import { collection, query, getDocs, doc, setDoc,getDoc, where } from "firebase/firestore";
 
 import { db } from '../../../firebaseconfig'
 import { v4 as uuidv4 } from "uuid";
@@ -10,8 +10,8 @@ import { async } from '@firebase/util';
 function Job() {
   const [allJobs, setAllJobs] = useState(null)
   const [state, dispatch] = useContext(userContext)
-  const [employerInfo,setEmployerInfo]=useState(null)
-  const [employerId,setEmployerId]=useState("")
+
+  // const [employerId,setEmployerId]=useState("")
   const fetchAllJobs = async () => {
     const q = query(collection(db, "jobs"));
 
@@ -35,15 +35,34 @@ function Job() {
     // store job id, candidate id,employer id, and all the relevant data
     // store a status field in the document
     const applicationId = uuidv4();
-    setEmployerId(job.employerId)
-    
+   const q=query(collection(db,"applications"),
+   where("candidateId","==",state.user.email)
+   )
+   const querySnapshot= await getDocs(q)
+  let applications=[]
+
+  querySnapshot.forEach((doc)=>{
+    applications.push(doc.data())
+    })
+    let isApplied=false
+    isApplied= applications.find((application)=>{
+      if(application.jobId===job.jobId)
+      {
+        
+        return true;
+      }
+    })
+    if(isApplied)
+    {
+        postMessage("Error","You are already applied for this Job!!!")
+        return
+    }
     try{
       
-      console.log(job)
-      
-     console.log(employerId)
-      await fetchEmployerInfo()
+      // console.log(job)
+
     // Add a new document in collection "Application"
+    // console.log(state.user)
     await setDoc(doc(db, "applications", applicationId), {
 
       applicationId,
@@ -71,18 +90,7 @@ function Job() {
 
 
   }
-  const fetchEmployerInfo= async ()=>{
-    console.log(employerId)
-    const docRef = doc(db, "userInfo",employerId);
-const docSnap = await getDoc(docRef);
 
-if (docSnap.exists()) {
-  console.log("Document data:", docSnap.data());
-} else {
-  // doc.data() will be undefined in this case
-  console.log("No such document!");
-}
-  }
   useEffect(() => {
     fetchAllJobs()
     
