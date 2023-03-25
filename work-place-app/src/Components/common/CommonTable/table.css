@@ -28,7 +28,7 @@
     margin: 10px auto;
     padding: 10px;
     font-weight: 500;
-  font-size: clamp(10px, 1.2vw,  16px);
+  font-size: clamp(15px, 1.2vw,  20px);
   line-height: clamp(12px, 1.2vw,  19px);
   }
   .shortlist-btn{

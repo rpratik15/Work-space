@@ -37,8 +37,8 @@ function CommonTable({columns,data,btnAction}) {
                             {
                               return(
                                 <div style={column.style} key={index} > 
-                                <a href={item[column.datakey]}
-                                target="_blank">Open</a>
+                                <a href={item[column.datakey]} 
+                                target="_blank" >View</a>
                                 </div>
                               )
                             }
@@ -50,15 +50,15 @@ function CommonTable({columns,data,btnAction}) {
                                 style={column.style} key={index}>
                                   <button
                                   className="shortlist-btn"
-                                  disabled={item.status === "accepted" || item.status === "rejected"}
+                                  disabled={item.status === "accepted" }
                                   onClick={()=>btnAction(item,'shortlist')}
-                                  style={{ opacity: item.status === "accepted" || item.status === "rejected" ? 0.5 : 1,}}
+                                  style={{ opacity: item.status === "accepted" || item.status === "rejected" ? 0.6 : 1,}}
                                   >Shortlist</button>
                                   <button
-                                    style={{ opacity: item.status === "accepted" || item.status === "rejected" ? 0.5 : 1,}}
-                                  disabled={item.status === "accepted" || item.status === "rejected"}
+                                    style={{ opacity: item.status === "accepted" || item.status === "rejected" ? 0.6 : 1,}}
+                                  disabled={item.status === "accepted" }
                               
-                                  onClick={()=>btnAction(item,'reject')}
+                                  onClick={()=>btnAction(item,'rejected')}
                                   className="reject-btn"
                                   >Reject</button>
                                 </div>
