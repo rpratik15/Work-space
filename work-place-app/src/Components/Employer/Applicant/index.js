@@ -2,9 +2,9 @@ import React, { useContext,useEffect, useState } from 'react'
 import { userContext } from '../../../context/userContext'
 import { collection, query, where,getDocs, deleteDoc,doc, onSnapshot,setDoc} from "firebase/firestore";
 import {db} from '../../../firebaseconfig'
-
+import {v4 as uuidV4} from 'uuid'
 import  CommonTable  from '../../common/CommonTable'
-import { async } from '@firebase/util';
+import {postMessage} from '../../../utils/postMessage'
 
 const columns = [
   {
@@ -115,7 +115,41 @@ const btnAction=async (data,type)=>{
         status: "accepted",
       },
       { merge: true });
+  
+  //here we create last_message collection
+  try{
+    console.log(data)
+    const lastMessageId=uuidV4();
+    const conversationKey=uuidV4();
+    const message=`hay hi ${data.candidateName}!! We have accepted your application for post of ${data.jobTitle}`
+    await setDoc(doc(db,"last_messages",lastMessageId),{
+      candidateId:data.candidateId,
+      employerId:data.employerId,
+      candidateName:data.candidateName,
+      employerName:data.companyName,
+      createdAt:new Date(),
+      message,
+      conversationKey,
+      lastMessageId
+    })
+
+    // 3. create a doc in conversation collection with the conversation key
+    const convId = uuidV4();
+    await setDoc(doc(db, "conversations", convId), {
+      conversationKey,
+      convId,
+      userId: state.user.email, 
+      createdAt: new Date(),
+      message,
+    });
+    postMessage("success","Application Accepted");
   }
+  catch(e)
+  {
+    console.log(e)
+    postMessage("Error","Error in transaction");
+  }
+}
 }
   return (
     applications&&applications.length===0?<div>NO APPLICATIONS</div>:
