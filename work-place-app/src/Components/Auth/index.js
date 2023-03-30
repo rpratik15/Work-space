@@ -61,7 +61,7 @@ function Auth({ type }) {
 
     signInWithPopup(auth, provider)
       .then((result) => {
-        // console.log(result.user)
+         console.log(result.user)
         const user = result.user;
         const { displayName, email, photoURL, uid } = user;
         dispatch({
